@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6254"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9532"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -129,7 +129,7 @@
                 <subviews>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rco-jL-xkU">
                         <rect key="frame" x="23" y="258" width="128" height="17"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="DisplayPlaylist V1.7" id="8iC-Ad-45f">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="DisplayPlaylist V2.1" id="8iC-Ad-45f">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -137,7 +137,7 @@
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R4h-xp-nW3">
                         <rect key="frame" x="23" y="239" width="144" height="17"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="©2015-02-18  C. Seyb" id="xsO-PL-heI">
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="©2016-03-07  C. Seyb" id="xsO-PL-heI">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -155,16 +155,17 @@
                         <rect key="frame" x="233" y="213" width="227" height="62"/>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="ElDuendeLogoFrei" id="arD-Bz-8n4"/>
                     </imageView>
-                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6aj-4G-YUR">
-                        <rect key="frame" x="276" y="157" width="110" height="26"/>
-                        <popUpButtonCell key="cell" type="push" title="RaspberryPi" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="8VH-m1-3Ep" id="puP-do-llM">
+                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6aj-4G-YUR" userLabel="systemName">
+                        <rect key="frame" x="276" y="157" width="125" height="26"/>
+                        <popUpButtonCell key="cell" type="push" title="LocalMac" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="KA9-4a-8sd" id="puP-do-llM" userLabel="systemName Popup">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="menu"/>
                             <menu key="menu" title="OtherViews" id="25S-Fq-aII">
                                 <items>
-                                    <menuItem title="RaspberryPi" state="on" id="8VH-m1-3Ep"/>
+                                    <menuItem title="RaspberryPi" id="8VH-m1-3Ep"/>
+                                    <menuItem title="RaspberryPi2" id="yoU-CS-SKS" userLabel="RaspberryPi2"/>
                                     <menuItem title="Odroid" id="63z-VE-XE2" userLabel="Odroid"/>
-                                    <menuItem title="LocalMac" id="KA9-4a-8sd"/>
+                                    <menuItem title="LocalMac" state="on" id="KA9-4a-8sd"/>
                                 </items>
                             </menu>
                             <connections>
@@ -180,7 +181,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QrJ-P4-SVB">
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QrJ-P4-SVB" userLabel="systemName Localisation">
                         <rect key="frame" x="117" y="163" width="135" height="17"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Anzeigemodus" id="SjJ-J7-sk6">
                             <font key="font" metaFont="system"/>
@@ -189,37 +190,21 @@
                         </textFieldCell>
                     </textField>
                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2cG-eX-NyV">
-                        <rect key="frame" x="276" y="123" width="110" height="26"/>
-                        <popUpButtonCell key="cell" type="push" title="Advertising" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="JNt-5O-hzN" id="ERb-AI-W8G">
+                        <rect key="frame" x="276" y="123" width="125" height="26"/>
+                        <popUpButtonCell key="cell" type="push" title="Video" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="wjc-3x-M16" id="ERb-AI-W8G">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="menu"/>
                             <menu key="menu" id="Qy5-1y-lDG">
                                 <items>
                                     <menuItem title="Off" id="4UR-cz-3Ww"/>
-                                    <menuItem title="Advertising" state="on" id="JNt-5O-hzN"/>
+                                    <menuItem title="Advertising" id="JNt-5O-hzN"/>
                                     <menuItem title="Clock" id="5MX-fC-K1V"/>
-                                    <menuItem title="Video" id="wjc-3x-M16"/>
+                                    <menuItem title="Video" state="on" id="wjc-3x-M16"/>
                                 </items>
                             </menu>
                         </popUpButtonCell>
                         <connections>
                             <action selector="ButtonHandlerWerbung:" target="494" id="uMA-kn-eLp"/>
-                        </connections>
-                    </popUpButton>
-                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cy6-UR-d6c" userLabel="Player">
-                        <rect key="frame" x="276" y="92" width="110" height="26"/>
-                        <popUpButtonCell key="cell" type="push" title="Decibel" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="XhO-qj-h6N" id="Zqf-qh-kIj">
-                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="menu"/>
-                            <menu key="menu" id="vcQ-Dt-Zys">
-                                <items>
-                                    <menuItem title="Decibel" state="on" id="XhO-qj-h6N"/>
-                                    <menuItem title="iTunes" id="gfV-hD-0AP"/>
-                                </items>
-                            </menu>
-                        </popUpButtonCell>
-                        <connections>
-                            <action selector="ButtonHandlerUsePlayer:" target="494" id="Ulv-sP-gvb"/>
                         </connections>
                     </popUpButton>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pno-4v-FC4">
@@ -240,6 +225,22 @@
                             <action selector="applicationShouldTerminate:" target="494" id="DCf-ul-H4h"/>
                         </connections>
                     </button>
+                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cy6-UR-d6c" userLabel="Player">
+                        <rect key="frame" x="276" y="92" width="125" height="26"/>
+                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="Zqf-qh-kIj">
+                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="menu"/>
+                            <menu key="menu" id="vcQ-Dt-Zys">
+                                <items>
+                                    <menuItem title="Decibel" id="XhO-qj-h6N"/>
+                                    <menuItem title="iTunes" id="gfV-hD-0AP"/>
+                                </items>
+                            </menu>
+                        </popUpButtonCell>
+                        <connections>
+                            <action selector="ButtonHandlerUsePlayer:" target="494" id="Ulv-sP-gvb"/>
+                        </connections>
+                    </popUpButton>
                 </subviews>
             </view>
             <point key="canvasLocation" x="83" y="204.5"/>
@@ -250,8 +251,8 @@
                 <outlet property="advertisingPopup" destination="ERb-AI-W8G" id="0Ry-c0-7ue"/>
                 <outlet property="currentPlayerDisplayedPopup" destination="Zqf-qh-kIj" id="Rd0-79-AUo"/>
                 <outlet property="currentPlayerLocalisation" destination="Pno-4v-FC4" id="pRS-0I-OyH"/>
-                <outlet property="runningOnLocalisation" destination="QrJ-P4-SVB" id="RpK-ar-p5S"/>
-                <outlet property="runningOnPopup" destination="puP-do-llM" id="3Mi-aU-2j2"/>
+                <outlet property="systemNameLocalisation" destination="QrJ-P4-SVB" id="wkI-NZ-I2X"/>
+                <outlet property="systemNamePopup" destination="puP-do-llM" id="GW4-Zv-A7d"/>
             </connections>
         </customObject>
         <customObject id="420" customClass="NSFontManager"/>

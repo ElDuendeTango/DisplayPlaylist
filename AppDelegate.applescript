@@ -12,22 +12,30 @@ script AppDelegate
     --
     -- Define variables for Popup's and the descriptions for it
     --
-    property runningOnLocalisation: missing value
-    property runningOnPopup: missing value
+    property systemNameLocalisation: missing value
+    property systemNamePopup: missing value
     property advertisingLocalisation: missing value
     property advertisingPopup: missing value
     property currentPlayerLocalisation: missing value
     property currentPlayerDisplayedPopup: missing value
     --
     -- The Value of the following variables can be changed in the ~/.DisplayPlaylist file
-    -- runningOnLocalisationDefault, advertisingLocalisationDefault and currentPlayerLocalisationDefault are just localization variables
-    -- and advertising and runningOn have an effect on the behaviour of the program
+    -- systemNameLocalisationDefault, advertisingLocalisationDefault and currentPlayerLocalisationDefault are just localization variables.
     --
-    property runningOnLocalisationDefault: "Anzeigemodus"
+    -- systemName, hostName, hostUser and hostPasswd are used to mount the odroid/raspi system to the Mac
+    --
+    -- advertising and musicPlayer have an effect on the behaviour of the program.
+    --
+    property systemNameLocalisationDefault: "Anzeigemodus"
     property advertisingLocalisationDefault: "Werbung"
     property currentPlayerLocalisationDefault: "Music Player"
-    property runningOn : "RaspberryPi" -- "RaspberryPi", "Odroid" or "LocalMac"
-    property advertising: "Advertising" -- "Off", "Advertising", "Video" or "Clock"
+    --
+    property systemName : "Odroid" -- "RaspberryPi", "RaspberryPi2", "Odroid" or "LocalMac"
+    property hostName : "odroid"
+    property hostUser : "odroid"
+    property hostPasswd : "XXyyZZ00"
+    --
+    property advertising : "Advertising" -- "Off", "Advertising", "Video" or "Clock"
     property musicPlayer : "Decibel" -- "Decibel" or "iTunes"
     --
     -- Global variables needed by various subroutines
@@ -150,8 +158,8 @@ script AppDelegate
         -- Touch the "Apple.lock" file to signal DisplayPlaylist.pl on Raspi or LocalMac, that DisplayPlaylist.app is
         -- currently creating a new DisplayPlaylist.log file.
         --
-        do shell script signalDisplayPlaylist & " " & "Perl.lock" & " " & "wait" & " " & runningOn
-        do shell script signalDisplayPlaylist & " " & "Apple.lock" & " " & "touch" & " " & runningOn -- Touch Apple.lock file
+        do shell script signalDisplayPlaylist & " " & "Perl.lock" & " " & "wait" & " " & systemName
+        do shell script signalDisplayPlaylist & " " & "Apple.lock" & " " & "touch" & " " & systemName -- Touch Apple.lock file
         if (typeOfLog = "Logfile") then
             tell application "System Events"
                 try -- Open displayPlaylistLog File and write the current Playlist to it
@@ -190,8 +198,8 @@ script AppDelegate
         -- "DisplayPlaylist.log" to "DisplayPlaylist.htm" or copies "HtmFile.htm" to "DisplayPlaylist.htm" and signals the
         -- browser to reload the current page.
         --
-        do shell script signalDisplayPlaylist & " " & "ProcessLogFile" & " " & typeOfLog & " " & runningOn
-        do shell script signalDisplayPlaylist & " " & "Apple.lock" & " " & "unlink" & " " & runningOn
+        do shell script signalDisplayPlaylist & " " & "ProcessLogFile" & " " & typeOfLog & " " & systemName
+        do shell script signalDisplayPlaylist & " " & "Apple.lock" & " " & "unlink" & " " & systemName
     end writePlaylist
     
     on mountHomeDir()
@@ -201,22 +209,12 @@ script AppDelegate
         --
         -- Will NOT return unless "Home Directory" can be mounted successfully.
         --
-        set systemName to "LocalMac"
-        if (runningOn is equal to "RaspberryPi") then
-            set systemName to "raspberrypi"
-            set systemUser to "pi"
-            set systemPassword to "raspberry"
-        else if (runningOn is equal to "Odroid") then
-            set systemName to "odroid"
-            set systemUser to "odroid"
-            set systemPassword to "odroid"
-        end if
         if (systemName is not equal to "LocalMac") then
             set mounted to false
             repeat while (mounted is equal to false)
                 set mounted_Disks to list disks
                 if mounted_Disks does not contain "Home Directory" then
-                    mount volume "afp://" & systemName as user name systemUser with password systemPassword
+                    mount volume "afp://" & hostName as user name hostUser with password hostPasswd
                     set mounted_Disks to list disks
                     if mounted_Disks does not contain "Home Directory" then
                         --
@@ -265,10 +263,16 @@ script AppDelegate
                         end repeat
                     end if
                     set prefsValue to text 1 thru ((count of prefsValue) - 1) of prefsValue -- Chop the last space character
-                         if (prefsItem = "runningOn") then
-                        set runningOn to prefsValue
-                    else if (prefsItem = "runningOnLocalisationDefault") then
-                        set runningOnLocalisationDefault to prefsValue
+                    if (prefsItem = "systemName") then
+                        set systemName to prefsValue
+                    else if (prefsItem = "hostName") then
+                            set hostName to prefsValue
+                    else if (prefsItem = "hostPasswd") then
+                        set hostPasswd to prefsValue
+                    else if (prefsItem = "hostUser") then
+                        set hostUser to prefsValue
+                    else if (prefsItem = "systemNameLocalisationDefault") then
+                        set systemNameLocalisationDefault to prefsValue
                     else if (prefsItem = "advertisingLocalisationDefault") then
                         set advertisingLocalisationDefault to prefsValue
                     else if (prefsItem = "currentPlayerLocalisationDefault") then
@@ -285,7 +289,7 @@ script AppDelegate
         -- Set PerlInterpreter, displayPlaylistLog and SignalDisplayPlaylist.pl to the right location
         --
         set perlInterpreter to do shell script "which perl"
-        if (runningOn is not equal to "LocalMac") then
+        if (systemName is not equal to "LocalMac") then
             --
             -- Mount the raspi/Odroid Home Directory
             --
@@ -294,7 +298,7 @@ script AppDelegate
             set signalDisplayPlaylist to perlInterpreter & " " & "\"/Volumes/Home Directory/Downloads/DisplayPlaylist/SignalDisplayPlaylist.pl\""
         else
             --
-            -- runningOn is "LocalMac"
+            -- systemName is "LocalMac"
             --
             set displayPlaylistHomeDir to "CloudStation:Programme:DisplayPlaylist"
             set posixdisplayPlaylistHomeDir to POSIX path of displayPlaylistHomeDir
@@ -309,7 +313,7 @@ script AppDelegate
             --
             -- Start "DisplayPlaylist.pl" on the "LocalMac"
             --
-            set displayPlaylistPl to perlInterpreter & " \"" & posixhomeFolder & posixdisplayPlaylistHomeDir & "/DisplayPlaylist.pl\" " & runningOn & " &> /dev/null & echo $!"
+            set displayPlaylistPl to perlInterpreter & " \"" & posixhomeFolder & posixdisplayPlaylistHomeDir & "/DisplayPlaylist.pl\" " & systemName & " &> /dev/null & echo $!"
             set processID to do shell script displayPlaylistPl -- Start DisplayPlaylist.pl in background on "LocalMac"
         end if
     end setupEnvironment
@@ -385,7 +389,7 @@ script AppDelegate
                 end if
                 set readSucceeded to item 7 of currentPlaylistProperties
                 --
-                -- Get currently played title for later comparison in repeat loop, to see if it has changed
+                -- Get currently played title for later comparison in repeat loop, to see if it has changed.
                 --
                 set currentTitlePlaying to item 5 of currentPlaylistProperties
                 --
@@ -394,15 +398,15 @@ script AppDelegate
                 set playerIsPlaying to item 6 of currentPlaylistProperties
                 if (readSucceeded) then
                     --
-                    -- Check if playlist has changed - Songs moved, added or deleted from Playlist
+                    -- Check if playlist has changed - Next Song played, Songs moved, added or deleted from Playlist
                     --
                     set currentPlaylistTitles to ""
                     set lastPlaylistTitles to ""
                     repeat with i from 1 to count of item 2 of currentPlaylistProperties
-                        set currentPlaylistTitles to currentPlaylistTitles & item i of item 2 of currentPlaylistProperties
+                        set currentPlaylistTitles to currentPlaylistTitles & item i of item 1 of currentPlaylistProperties & item i of item 2 of currentPlaylistProperties & item i of item 3 of currentPlaylistProperties & item i of item 4 of currentPlaylistProperties & "\n"
                     end repeat
                     repeat with i from 1 to count of item 2 of playlistProperties
-                        set lastPlaylistTitles to lastPlaylistTitles & item i of item 2 of playlistProperties
+                        set lastPlaylistTitles to lastPlaylistTitles & item i of item 1 of playlistProperties & item i of item 2 of playlistProperties & item i of item 3 of playlistProperties & item i of item 4 of playlistProperties & "\n"
                     end repeat
                     if (lastPlaylistTitles is not equal to currentPlaylistTitles) then
                         copy currentPlaylistProperties to playlistProperties
@@ -461,10 +465,10 @@ script AppDelegate
     
     on ButtonHandlerAnzeigeModus_(sender)
         --
-        -- Call setupEnvironment() and set runningOn to the value of the Popup
+        -- Call setupEnvironment() and set systemName to the value of the Popup
         --
         setupEnvironment()
-        set runningOn to (runningOnPopup's titleOfSelectedItem()) as string
+        set systemName to (systemNamePopup's titleOfSelectedItem()) as string
         --
         -- Start DisplayPlaylistMain() - will run until application is quit
         --
@@ -488,13 +492,13 @@ script AppDelegate
 		-- Insert code here to initialize your application before any files are opened
         setupEnvironment()
         --
-        -- Set the localized texts of runningOnLocalisation, advertisingLocalisation and currentPlayerLocalisation
+        -- Set the localized texts of systemNameLocalisation, advertisingLocalisation and currentPlayerLocalisation
         -- and set the Popup's to predefined values or from the ones of .Displayplaylist
         --
-        runningOnLocalisation's setStringValue_(runningOnLocalisationDefault)
+        systemNameLocalisation's setStringValue_(systemNameLocalisationDefault)
         advertisingLocalisation's setStringValue_(advertisingLocalisationDefault)
         currentPlayerLocalisation's setStringValue_(currentPlayerLocalisationDefault)
-        runningOnPopup's setTitle_(runningOn)
+        systemNamePopup's setTitle_(systemName)
         advertisingPopup's setTitle_(advertising)
         currentPlayerDisplayedPopup's setTitle_(musicPlayer)
         --
@@ -506,7 +510,7 @@ script AppDelegate
 	
 	on applicationShouldTerminate_(sender)
 		-- Insert code here to do any housekeeping before your application quits
-        if runningOn is equal to "LocalMac" then
+        if systemName is equal to "LocalMac" then
             do shell script killDisplayPlaylist
         end if
         --
